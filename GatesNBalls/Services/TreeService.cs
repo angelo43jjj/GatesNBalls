@@ -34,6 +34,7 @@ namespace GatesNBalls.Services
                 }
             }
 
+            // total no of gates is 2 to the power of the depth less 1
             double noGates = Math.Pow(2, depth) - 1;
 
             if (gates.Length != noGates)
@@ -53,17 +54,20 @@ namespace GatesNBalls.Services
 
         public int WhichOneEmpty(int depth, string[] gates)
         {
+            // total no of gates is 2 to the power of the depth less 1
             double numberOfGates = Math.Pow(2, depth) - 1;
 
             bool[] buckets = new bool[(int)Math.Pow(2, depth)];
 
             Dictionary<int, string> gateStatus = new Dictionary<int, string>();
 
+            //initialise the gates to the supplied initial states (left open or right open)
             for (int i = 1; i <= numberOfGates; i++)
             {
                 gateStatus.Add(i, gates[i - 1]);
             };
 
+            // assuming the containers form the next level in the tree, the first node of the containers in 2 to the power of depth
             int bottomStart = (int)Math.Pow(2, depth);
 
             // buckets.Length is one more that number of balls
@@ -74,15 +78,18 @@ namespace GatesNBalls.Services
                 {
                     if (gateStatus[currentGate] == "L")
                     {
+                        // if the gate is open to the left, the ball moves to the left and the gate opens to the right 
                         gateStatus[currentGate] = "R";
                         currentGate = currentGate * 2;
                     }
                     else
                     {
+                        // if the gate is open to the right, the ball moves to the right and the gate opens to the left 
                         gateStatus[currentGate] = "L";
                         currentGate = currentGate * 2 + 1;
                     }
                 }
+                //container in the last move gets the ball. the container number is currentGate minus the first container number
                 buckets[currentGate - bottomStart] = true;
             }
 
@@ -90,9 +97,16 @@ namespace GatesNBalls.Services
 
         }
 
+        /// <summary>
+        /// prediction is based on the intitial status where along path to the container all the gates are closed which means it has
+        /// the least possibility to get the ball
+        /// </summary>
+        /// <param name="depth"></param>
+        /// <param name="gates"></param>
+        /// <returns></returns>
         public int PredictEmpty(int depth, string[] gates)
         {
-            //prediction is based on the intitials status where along path to the container all the gates are closed
+            
 
             double numberOfGates = Math.Pow(2, depth) - 1;
 
@@ -112,6 +126,8 @@ namespace GatesNBalls.Services
                 if (gateStatus[currentGate] == "L")
                 {
                     // go to the closed side so we can travel the closed gates path
+                    // if the Left gate is open, move to the right which is the closed gate 
+                    // thus moving along the closed gates path
                     currentGate = currentGate * 2 + 1;
                 }
                 else

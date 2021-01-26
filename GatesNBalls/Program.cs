@@ -41,7 +41,7 @@ namespace GatesNBalls
 
             Console.WriteLine($"Predicted empty contaner is at position {predictedEmpty} in the rows of contaners");
 
-            Console.WriteLine($"Empty contaner is at position {empty} in the rows of contaners");
+            Console.WriteLine($"Actual empty contaner is at position {empty} in the rows of contaners");
 
             Console.ReadLine();
         }
